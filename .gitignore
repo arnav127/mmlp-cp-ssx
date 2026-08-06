@@ -1,0 +1,32 @@
+# LaTeX build artifacts
+*.aux
+*.log
+*.toc
+*.out
+*.nav
+*.snm
+*.vrb
+*.blg
+*.bbl
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# Python cache & build
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# Temporary preview PNGs
+paper_p*.png
+pres_p*.png
+
+# Data cache & OS files
+data_cache/
+.DS_Store
+Thumbs.db

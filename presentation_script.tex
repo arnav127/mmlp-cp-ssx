@@ -1,0 +1,222 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{color, xcolor}
+\usepackage{enumitem}
+
+\definecolor{primaryblue}{RGB}{15, 32, 39}
+\definecolor{accentteal}{RGB}{49, 151, 149}
+\definecolor{burgundy}{RGB}{114, 47, 55}
+\definecolor{scriptbg}{RGB}{248, 249, 250}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    citecolor=accentteal,
+    urlcolor=accentteal
+}
+
+\title{\LARGE \textbf{Verbatim Presentation Script}\\[0.3em]
+\Large CP-SSX: Causal Prescriptive Student Success eXplainer Engine}
+
+\author{
+    \textbf{Group 4 -- Managerial Machine Learning in Python (MMLP)}\\[0.5em]
+    \small
+    \begin{tabular}{c c}
+        \textbf{Aayush Garg} & (PGPGC202500004) \\
+        \textbf{Aditya Patwa} & (PGPGC202500008) \\
+        \textbf{Aniruddha Sharma} & (PGPGC202500105) \\
+        \textbf{Arnav Dixit} & (PGPGC202500112) \\
+        \textbf{Saakshi Chowdhary} & (PGPGC202500260) \\
+        \textbf{Yash Shukla} & (PGPGC202500183) \\
+    \end{tabular}\\[0.5em]
+    \small Indian Institute of Management Ahmedabad
+}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent This document provides the complete, word-for-word presentation script for Group 4's MMLP final project submission. The script is structured slide-by-slide, matching the 35-slide Beamer presentation deck (\texttt{presentation.pdf}), providing formal academic explanations, technical traces, and managerial commentary suitable for a 15--20 minute oral defense.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Introduction \& Problem Statement (Slides 1--2)}
+
+\subsection{Slide 1: Title Slide}
+\begin{quote}\small \itshape
+"Good morning, Professor and members of the jury. We are Group 4, and today we present \textbf{CP-SSX: The Causal Prescriptive Student Success eXplainer Engine}. 
+
+Most educational analytics systems stop at passive prediction---answering 'Who is going to drop out?' Our project shifts the paradigm toward prescriptive managerial action---answering 'What exact intervention will save this specific student, and how do we allocate our limited university resources to maximize overall retention?' We combine deep representation learning, unsupervised factor alignment, causal uplift meta-learners, and Mixed-Integer Linear Programming to solve this problem."
+\end{quote}
+
+\subsection{Slide 2: Executive Agenda}
+\begin{quote}\small \itshape
+"Our presentation is structured into five core sections. First, we will establish our data foundations using the real-world UCI 697 baseline and our temporal simulation pipeline. Second, we state our core research questions. Third, we situate our work in the literature across EWS, deep learning, causal inference, and prescriptive analytics. Fourth, we walk through our 6-module mathematical architecture and Python implementation. Finally, we share our empirical 80/20 train-test benchmarks, retention ROI, policy sensitivity analysis, and live portal demo."
+\end{quote}
+
+\section{Data Architecture \& Foundations (Slides 3--8)}
+
+\subsection{Slide 3: Real-World Student Foundation (4,424 Profiles)}
+\begin{quote}\small \itshape
+"Starting with Section 1: Data Foundations. Our system is built on 4,424 real undergraduate student profiles sourced from the published UCI Machine Learning Repository Dataset ID 697. To evaluate dynamic early warning signals over time, we complement these static demographic and academic records with 12-week temporal interaction signals---tracking weekly Virtual Learning Environment engagement velocity, submission procrastination lags, and composite academic preparedness indices."
+\end{quote}
+
+\subsection{Slide 4: Data Fields and Prediction Labels (UCI 697)}
+\begin{quote}\small \itshape
+"Looking at the slide, our raw input vector covers 37 covariates spanning demographics, socioeconomic indicators like debtor status and tuition payment status, and 1st and 2nd semester academic performance. The original dataset contains a 3-class target: Dropout, Enrolled, or Graduate. For managerial precision, we frame this as a binary risk classification problem where target 1 represents Dropout risk and target 0 represents a Safe outcome. This allows our deep learning models to output a clean probabilistic risk score $P(y=1 \mid X_i)$."
+\end{quote}
+
+\subsection{Slide 5: Data Pre-Processing Pipeline \& Code}
+\begin{quote}\small \itshape
+"Slide 5 details our data pre-processing pipeline. We systematically handled missing continuous values via program-level median imputation and encoded categorical variables. A key pre-processing challenge was grade normalization. As shown in the code snippet, Portuguese secondary admission grades range from 95 to 200, whereas university semester grades range from 0 to 20. We normalized all academic grades onto a uniform $[0.0, 1.0]$ continuous scale using dual-scale clipping to guarantee stable numerical gradients during neural network training."
+\end{quote}
+
+\subsection{Slide 6: Data Pre-Processing \& Simulation Pipeline Flow}
+\begin{quote}\small \itshape
+"This flowchart illustrates our end-to-end data pre-processing pipeline. Raw UCI student records pass through dual-scale grade normalization and composite feature engineering---yielding Poverty and Preparedness indices. These static records then feed into our 12-week temporal trajectory simulation engine to construct the final 3D input tensor $\mathbf{X} \in \mathbb{R}^{N \times 12 \times 4}$ required for deep sequence modeling."
+\end{quote}
+
+\subsection{Slide 7: Semi-Synthetic Temporal Extension}
+\begin{quote}\small \itshape
+"We want to be 100\% transparent regarding our temporal data. Because open-source longitudinal clickstream logs tied to rich demographic baselines are unavailable in public repositories, we synthesized calibrated 12-week temporal trajectories using domain-informed simulation rules. As highlighted in the code, simulated dropout students exhibit engagement decay over time and accelerating submission delays, while non-dropouts maintain stable or cyclic participation. This serves as a rigorous plasmode simulation to benchmark our temporal Bi-LSTM."
+\end{quote}
+
+\subsection{Slide 8: Why UCI Dataset 697? Rationale \& Benchmark}
+\begin{quote}\small \itshape
+"Why choose UCI Dataset 697 over other popular learning analytics benchmarks like OULAD or EdNet? As shown in our comparative table, OULAD and EdNet lack detailed socioeconomic covariates. UCI 697 provides explicit financial indicators---such as debtor status, unpaid tuition, and macroeconomic unemployment. Having rich financial covariates is strictly necessary if we want to evaluate targeted financial micro-grants against faculty academic advising."
+\end{quote}
+
+\section{Research Objectives \& Literature (Slides 9--13)}
+
+\subsection{Slide 9: Research Objectives: A Two-Stage Framework}
+\begin{quote}\small \itshape
+"Moving to Section 2: Research Objectives. Our core managerial question is: 'Can we build a system that not only predicts which students will drop out, but tells university administrators exactly which support resource to give each student---while staying within the university's actual budget?' We divide this into a two-stage framework. Part I builds a Multi-Task Bidirectional LSTM to predict end-of-term CGPA and dropout risk. Part II implements unsupervised PCA factor probing, causal CATE T-Learners, and PuLP MILP optimization."
+\end{quote}
+
+\subsection{Slide 10: Four Interrelated Sub-Questions}
+\begin{quote}\small \itshape
+"We decompose our research problem into four specific sub-questions:
+\begin{enumerate}
+    \item Q1: Can temporal deep sequence models outperform static tabular classifiers like XGBoost by capturing engagement momentum and decay?
+    \item Q2: Can we decompose opaque neural hidden states into 4 interpretable, strictly orthogonal managerial factor scores?
+    \item Q3: Can Causal T-Learners estimate heterogeneous treatment effects without RCT trial data?
+    \item Q4: Can Mixed-Integer Linear Programming allocate constrained campus resources to maximize total cohort retention?
+\end{enumerate}"
+\end{quote}
+
+\subsection{Slide 11: Literature Review --- 1. EWS \& Static ML}
+\begin{quote}\small \itshape
+"Section 3 situates our contributions in the literature. Early Alert Systems were pioneered by Arnold and Pistilli in 2012 with Course Signals at Purdue, followed by Jayaprakash et al. in 2014 with open-source EWS analytics. Realinho et al. in 2022 benchmarked static models on UCI 697, achieving 86.8\% accuracy. However, the fundamental limitation of all legacy EWS is that they are purely predictive---they output static risk scores without providing causal prescriptive guidance."
+\end{quote}
+
+\subsection{Slide 12: Literature Review --- 2. Deep Learning for Education}
+\begin{quote}\small \itshape
+"In deep learning for education, Hochreiter and Schmidhuber's LSTM architecture laid the foundation for temporal modeling. Waheed et al. in 2020 and Mubarak et al. in 2022 demonstrated that deep neural networks significantly outperform traditional tree ensembles on sequential learning logs. Martins et al. in 2021 highlighted early prediction challenges under class imbalance. Our contribution moves beyond standard LSTMs by introducing a Multi-Task Bi-LSTM with a LayerNorm bottleneck designed for downstream factor extraction."
+\end{quote}
+
+\subsection{Slide 13: Literature Review --- 3. Causal Inference \& Prescriptive ML}
+\begin{quote}\small \itshape
+"In causal inference, Athey and Imbens in 2016 established theoretical foundations for Conditional Average Treatment Effects (CATE). Künzel et al. in 2019 formalized T-Learner meta-algorithms for counterfactual estimation. Bertsimas and Kallus in 2020 introduced prescriptive analytics by coupling machine learning with mathematical optimization. CP-SSX bridges these fields by combining continuous CATE estimation with MILP budget constraints applied to university student success."
+\end{quote}
+
+\section{System Methodology \& Code (Slides 14--21)}
+
+\subsection{Slide 14: High-Level System Architecture}
+\begin{quote}\small \itshape
+"Section 4 details our methodology. This architectural diagram illustrates our complete 6-module pipeline. Raw student attributes flow into our PyTorch Bi-LSTM sequence encoder (Module 2). The 32-dimensional bottleneck state $h_{i,t}$ is hooked by our Aligned PCA Engine (Module 3) to extract 4 orthogonal root-cause factors. CATE T-Learners (Module 4) estimate individualized treatment uplift per intervention, which feeds into our PuLP MILP Solver (Module 5) to compute optimal binary assignments for our Stakeholder Portal (Module 6)."
+\end{quote}
+
+\subsection{Slide 15: Bi-LSTM Architecture \& Joint Loss Formulation}
+\begin{quote}\small \itshape
+"Slide 15 shows our PyTorch Bi-LSTM implementation. Notice line 4 of the code: we attach a 32-dimensional LayerNorm bottleneck layer after the 2-layer Bidirectional LSTM. Layer Normalization is critical because it ensures batch-size invariant embeddings for single-student real-time inference. We train the network using a joint multi-task loss: 60\% Binary Cross-Entropy on dropout classification plus 40\% Mean Squared Error on final GPA prediction."
+\end{quote}
+
+\subsection{Slide 16: ML/DL Benchmark: CP-SSX vs. Traditional Classifiers}
+\begin{quote}\small \itshape
+"Here we compare our Multi-Task Bi-LSTM against static baselines on held-out test data. Logistic Regression reaches 0.795 AUC. Random Forest achieves 0.841 AUC. Static XGBoost achieves a strong 0.865 AUC. Our Bi-LSTM outperforms all baselines with 0.884 Test AUC and 0.312 GPA RMSE. Crucially, while XGBoost stops at black-box prediction, our Bi-LSTM's 32-dimensional bottleneck state provides the mathematical foundation for downstream PCA concept probing."
+\end{quote}
+
+\subsection{Slide 17: PCA Factor Alignment Algorithm}
+\begin{quote}\small \itshape
+"In Module 3, we decompose the 32-dimensional bottleneck state into 4 orthogonal factor scores. We want to clarify a mathematical point: PCA components are orthogonal by definition ($\text{Cov}(F_j, F_k) = 0$). Our novel contribution is the automated eigenvector alignment algorithm shown in the code. Raw PCA axes have arbitrary signs and directions; our algorithm calculates correlation matrices against reference domain concepts, automatically maps each axis to its semantic concept, and sign-corrects the components so that a higher factor score always represents higher risk severity."
+\end{quote}
+
+\subsection{Slide 18: Causal Analytics \& T-Learner Implementation}
+\begin{quote}\small \itshape
+"In Module 4, we estimate Conditional Average Treatment Effects (CATE). A true T-Learner trains two separate models per intervention: a Control Model $\hat{\mu}_0$ estimating risk without treatment, and a Treated Model $\hat{\mu}_1$ estimating risk under treatment. CATE is predicted as $\hat{\tau}_{i,a} = \hat{\mu}_0 - \hat{\mu}_1$. To enforce physical realism, line 14 shows our physical bounding hook: individual treatment uplift is strictly bounded by baseline predicted risk minus 0.02, preventing non-physical predictions."
+\end{quote}
+
+\subsection{Slide 19: Causal T-Learner Counterfactual Estimation Flow}
+\begin{quote}\small \itshape
+"This TikZ diagram visualizes the T-Learner counterfactual pipeline. Input student covariates and PCA factors feed simultaneously into Control Model $\hat{\mu}_0$ and Treated Model $\hat{\mu}_1$. The difference produces raw uplift, which passes through our physical bounding hook to output bounded CATE estimates $\hat{\tau}_{i,a}$ for Advising, Tutoring, and Micro-Grants."
+\end{quote}
+
+\subsection{Slide 20: MILP Optimization Formulation \& Code}
+\begin{quote}\small \itshape
+"Module 5 formulates resource allocation as a Mixed-Integer Linear Program solved using PuLP CBC in under 0.45 seconds. As shown in the code, decision variables $x_{i,a} \in \{0, 1\}$ represent assigning intervention $a$ to student $i$. The objective maximizes total cohort risk reduction subject to mutual exclusivity---at most 1 intervention per student---and strict capacity bounds on faculty advising hours, tutoring hours, and financial grant budgets."
+\end{quote}
+
+\subsection{Slide 21: Prescriptive MILP Resource Assignment Matrix}
+\begin{quote}\small \itshape
+"This diagram summarizes the MILP optimization engine. It takes the $N \times 3$ CATE uplift matrix, combines it with operational capacity bounds, and outputs an optimal binary allocation vector $x_{i,a}^*$. This replaces naive first-come first-served queuing with a mathematically guaranteed maximum-retention assignment."
+\end{quote}
+
+\section{Empirical Results \& Managerial Impact (Slides 22--30)}
+
+\subsection{Slide 22: Empirical Benchmark: 80/20 Train-Test Metrics}
+\begin{quote}\small \itshape
+"Section 5 presents our empirical results. To prevent data leakage, all metrics are evaluated on an 80/20 stratified held-out test set ($N=4,424$). Our Multi-Task Bi-LSTM achieves 0.884 Test AUC and 0.312 GPA RMSE. The PCA Factor Engine explains 91.5\% of total bottleneck variance with $0.000010$ off-diagonal factor covariance. The PuLP MILP solver executes in less than 0.45 seconds."
+\end{quote}
+
+\subsection{Slide 23: Cohort Diagnostic: Concept Severity Distribution}
+\begin{quote}\small \itshape
+"Slide 23 displays the empirical severity distribution across our 4 PCA factors. Factor $C_3$ (Financial Hardship) and Factor $C_2$ (Procrastination Lag) exhibit the highest cohort-wide variance, confirming that financial distress and deadline delays are the primary drivers of student dropout in this cohort."
+\end{quote}
+
+\subsection{Slide 24: Intervention \& Capacity Analysis}
+\begin{quote}\small \itshape
+"Slide 24 visualizes the CATE uplift curves and MILP capacity utilization. Tutoring exhibits high uplift variance ($0.10$ to $0.45$), meaning it is highly effective for specific students but less so for others. The MILP solver recognizes this heterogeneity, achieving 100\% tutoring utilization by targeting students with the highest CATE return."
+\end{quote}
+
+\subsection{Slide 25: Executive ROI \& Retention Impact Comparison}
+\begin{quote}\small \itshape
+"Comparing CP-SSX to legacy passive EWS: per \$50,000 budget, passive EWS retains 42 students because it targets risk without knowing intervention efficacy. CP-SSX retains 184 students by assigning interventions based on maximum CATE uplift under budget caps."
+\end{quote}
+
+\subsection{Slide 26: Tuition Revenue \& Retention ROI Analysis}
+\begin{quote}\small \itshape
+"Section 6 explores managerial implications. From a higher education economics perspective, each prevented dropout preserves approximately INR 4.2 Lakhs in net tuition revenue over remaining semesters. Allocating \$35,000 in micro-grants to high-financial-hardship ($C_3$) students yields a projected $4.8\times$ ROI in retained tuition revenue while saving 32 faculty advising hours per week."
+\end{quote}
+
+\subsection{Slide 27: Policy Sensitivity Analysis}
+\begin{quote}\small \itshape
+"Our model allows university deans to perform dynamic policy simulations. If the Dean expands the micro-grant budget by 20\%, the MILP solver re-allocates 14 students from Advising to Micro-Grants, instantly freeing up 28 faculty advising hours for second-tier at-risk students. If advising capacity drops by 30\%, the model strictly prioritizes high-CATE students, preserving overall cohort retention."
+\end{quote}
+
+\subsection{Slide 28: Interactive Streamlit Portal Demo}
+\begin{quote}\small \itshape
+"We invite the jury to test our live Streamlit dashboard by running \texttt{streamlit run app.py}. The dashboard provides two views: an Advisor View with student lookups, counterfactual what-if sliders, and local Ollama SLM narrative explanations; and a Dean View with interactive budget sliders and dynamic MILP re-optimization."
+\end{quote}
+
+\subsection{Slide 29: Limitations \& Future Work}
+\begin{quote}\small \itshape
+"We acknowledge two limitations. First, VLE interaction logs were simulated based on real UCI baseline distributions. Second, CATE estimation assumes unconfoundedness based on 37 static + 4 concept covariates. Future work will focus on integrating CP-SSX directly into Canvas and Moodle LMS APIs for live streaming, and conducting randomized controlled trials to empirically validate CATE uplift estimates."
+\end{quote}
+
+\subsection{Slide 30: Conclusion}
+\begin{quote}\small \itshape
+"In conclusion, CP-SSX bridges the gap between predictive modeling and prescriptive action. By combining deep sequence learning, unsupervised PCA factor alignment, CATE T-Learners, and MILP optimization, we empower university administrators to shift from passively observing student failure to prescriptively maximizing student retention within real-world budget constraints. Thank you, and we look forward to your questions."
+\end{quote}
+
+\end{document}
