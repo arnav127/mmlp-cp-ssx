@@ -86,21 +86,34 @@ cd cp_ssx_engine
 pip install -r requirements.txt
 ```
 
-### 2. Generate Synthetic Dataset
+### 2. Pre-Compute & Build Cache (Recommended)
+To ensure the Streamlit web app launches instantly without waiting for neural network training and Causal T-Learner fitting, run the pre-computation build cache script:
 ```bash
-python data/generate_data.py
+python build_cache.py
+```
+* **What `build_cache.py` does:**
+  1. Loads student demographic and 12-week clickstream data into memory.
+  2. Trains the PyTorch Multi-Task Bi-LSTM sequence model for 15 epochs.
+  3. Fits the **Unsupervised PCA Factor Engine** on the 32-dimensional bottleneck vectors $h_{i,t}$.
+  4. Fits the **Causal T-Learner Meta-Algorithms** for Advising, Tutoring, and Micro-Grant interventions.
+  5. Serializes the fitted model pipeline into `data_cache/pipeline_cache.pkl` for instantaneous web dashboard loading.
+
+### 3. Generate Report & Executive Charts
+To generate all 12 high-resolution charts used in `paper.pdf` and `presentation.pdf`:
+```bash
+python generate_charts.py
 ```
 
-### 3. Test Modules Individually
+### 4. Test Modules Individually
 ```bash
 python src/models/base_lstm.py
-python src/models/concept_probing.py
+python src/models/pca_factor_engine.py
 python src/causal/uplift_engine.py
 python src/optimization/milp_allocator.py
 python src/llm/local_narrative.py
 ```
 
-### 4. Launch Streamlit Application
+### 5. Launch Interactive Streamlit Web Application
 ```bash
 streamlit run app.py
 ```
@@ -112,4 +125,5 @@ streamlit run app.py
 - **Machine Learning & Causal Inference:** `Scikit-Learn`, `XGBoost`
 - **Optimization:** `PuLP` (CBC Solver)
 - **Local SLM:** `Ollama` (`llama3.2:3b` / `phi4:mini`) with fallback engine
-- **Web App:** `Streamlit`
+- **Web App & Visualization:** `Streamlit`, `Matplotlib`, `Seaborn`
+
