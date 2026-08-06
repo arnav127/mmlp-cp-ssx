@@ -116,8 +116,8 @@ class CausalUpliftEngine:
         
         for tr in self.treatments:
             tau_hat = self.models_control[tr].predict(X_scaled) - self.models_treated[tr].predict(X_scaled)
-            # Clip uplift between 0.00 and 0.65 for realistic intervention impact
-            cate_preds[f"CATE_{tr}"] = np.clip(tau_hat, 0.01, 0.65)
+            # Clip uplift between 0.01 and 0.25 for realistic 1% to 25% intervention impact
+            cate_preds[f"CATE_{tr}"] = np.clip(tau_hat, 0.01, 0.25)
             
         return pd.DataFrame(cate_preds)
 

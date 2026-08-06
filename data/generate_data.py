@@ -158,12 +158,12 @@ def fetch_real_published_data(data_dir: str = "data_cache") -> Tuple[pd.DataFram
     base_risk = 1.0 / (1.0 + np.exp(-logit))
     base_risk = np.clip(base_risk, 0.03, 0.85)
 
-    # Physical CATE Uplifts bounded strictly by base_risk - 0.02
+    # Physical CATE Uplifts bounded strictly by base_risk - 0.02 (Realistic 5% to 22% risk reduction)
     max_possible_uplift = np.maximum(0.01, base_risk - 0.02)
     
-    raw_tau_adv = 0.20 + 0.20 * f2_procrastination + 0.10 * f4_social
-    raw_tau_tut = 0.25 + 0.25 * f1_academic + 0.05 * (1.0 - academic_preparedness_index)
-    raw_tau_grant = 0.20 + 0.30 * f3_financial + 0.10 * poverty_index
+    raw_tau_adv = 0.05 + 0.10 * f2_procrastination + 0.05 * f4_social
+    raw_tau_tut = 0.06 + 0.12 * f1_academic + 0.04 * (1.0 - academic_preparedness_index)
+    raw_tau_grant = 0.05 + 0.14 * f3_financial + 0.04 * poverty_index
 
     tau_advising = np.minimum(raw_tau_adv, max_possible_uplift)
     tau_tutoring = np.minimum(raw_tau_tut, max_possible_uplift)
